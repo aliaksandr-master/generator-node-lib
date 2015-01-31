@@ -1,7 +1,22 @@
-# generator-node-lib [![Build Status](https://secure.travis-ci.org/aliaksandr-pasynkau/generator-node-lib.png?branch=master)](https://travis-ci.org/aliaksandr-pasynkau/generator-node-lib)
+[![npm](http://img.shields.io/npm/v/generator-node-lib.svg?style=flat-square)](https://www.npmjs.com/package/generator-node-lib)
+[![npm](http://img.shields.io/npm/l/generator-node-lib.svg?style=flat-square)](http://opensource.org/licenses/MIT)
+
+# generator-node-lib 
 
 > [Yeoman](http://yeoman.io) generator
 
+## Features
+- complete development process
+- jshint, editorconfig, gitignore
+- tests by [nodeunit](https://github.com/caolan/nodeunit)
+- code test coverage (by [coveralls.io](https://coveralls.io))
+- [travis](https://travis-ci.org) ci 
+- shields
+
+watch project files and run check tasks (jshint, tests)
+```shell
+$ grunt
+```
 
 ## Getting Started
 
