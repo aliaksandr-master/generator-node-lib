@@ -5,10 +5,38 @@ var chalk = require('chalk');
 var path = require('path');
 var yosay = require('yosay');
 var _ = require('lodash');
+var git  = require('gift');
+var fs = require('fs');
+var url = require('url');
 
 module.exports = yeoman.generators.Base.extend({
 	initializing: function () {
 		this.pkg = require('../package.json');
+
+		var that = this;
+		var done = this.async();
+		var destPath = this.destinationPath();
+
+		if (fs.existsSync(destPath + '/.git')) {
+			var repo = git(destPath);
+			repo.config(function (err, config) {
+				if (err) {
+					done();
+					return;
+				}
+				var items = ((config || {}).items || {});
+				var parsedUrl = url.parse(items['remote.origin.url'] || '');
+				delete parsedUrl.auth;
+
+				that.options.repo = url.format(parsedUrl);
+
+				done();
+			});
+			return;
+		}
+
+		that.options.repo = undefined;
+		done();
 	},
 
 	prompting: function () {
@@ -58,13 +86,8 @@ module.exports = yeoman.generators.Base.extend({
 				message: 'Github Repository',
 				validate: function (value) {
 					return REPO_EXP.test(value);
-				}
-			},
-			{
-				type: "input",
-				name: 'license',
-				message: 'License',
-				default: 'MIT'
+				},
+				default: this.options.repo
 			},
 			{
 				type: "input",
@@ -92,6 +115,7 @@ module.exports = yeoman.generators.Base.extend({
 
 		this.prompt(prompts, function (props) {
 			_.extend(this.options, props);
+			this.options.githubRepo = (this.options.githubRepo || '').replace(/\.git$/, '');
 			this.options.appnameVar = _.camelCase(this.options.appname.replace(/^[^a-zA-Z_$]+/, 'lib'));
 			this.options.appnameCov = 'NODE_LIB_' + this.options.appnameVar.toUpperCase()+'_COVERAGE';
 

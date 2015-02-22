@@ -12,7 +12,7 @@
     "coveralls": "npm run jscov && npm run test_unit_cov | node_modules/.bin/coveralls"
   },
   "keywords": [
-    <%= '"'+keywords.split(/\s+/).join('"\n    "')+'"' %>
+    <%= '"'+keywords.split(/\s+/).join('",\n    "')+'"' %>
   ],
   "author": "<%= githubUser %>",
   <% if (license) {%>
