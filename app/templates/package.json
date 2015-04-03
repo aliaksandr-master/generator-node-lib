@@ -1,36 +1,29 @@
 {
-  "name": "<%= appname %>",
-  "version": "<%= version %>",
-  "description": "<%= description %>",
-  "main": "index.js",
+  "name": "<%= appname.value %>",
+  "version": "<%= props.version %>",
+  "main": "lib/index.js",
   "scripts": {
-    "test_jshint": "node_modules/.bin/grunt jshint",
-    "test_unit": "node_modules/.bin/nodeunit test/",
-    "test_unit_cov": "<%= appnameCov %>=1 node_modules/.bin/nodeunit --reporter=lcov test/",
-    "jscov": "node_modules/.bin/jscoverage lib",
-    "test": "npm run test_jshint && npm run test_unit",
-    "coveralls": "npm run jscov && npm run test_unit_cov | node_modules/.bin/coveralls"
+    "test": "node_modules/.bin/grunt jshint && node_modules/.bin/nodeunit test/",
+    "coveralls": "node_modules/.bin/jscoverage lib && <%= appname.covName %>=1 node_modules/.bin/nodeunit --reporter=lcov test/ | node_modules/.bin/coveralls"
   },
-  "keywords": [
-    <%= '"'+keywords.split(/\s+/).join('",\n    "')+'"' %>
-  ],
-  "author": "<%= githubUser %>",
-  <% if (license) {%>
-    "license": "<%= license %>",
+  "description": "",
+  "keywords": [],
+  <% if (props.license) { %>
+    "license": "<%= props.license %>",
   <% } %>
-  <% if (githubRepo) { %>
+  <% if (repository) { %>
+    "author": "<%= repository.user %>",
     "repository": {
       "type": "git",
-      "url": "<%= githubRepo %>.git"
+      "url": "<%= repository.url %>.git"
     },
     "bugs": {
-      "url": "<%= githubRepo %>/issues"
+      "url": "<%= repository.url %>/issues"
     },
-    "homepage": "<%= githubRepo %>",
+    "homepage": "<%= repository.url %>",
   <% } %>
   "dependencies": {},
   "devDependencies": {
-    "lodash": "^3.0.1",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-jshint": "^0.11.0",

@@ -9,51 +9,54 @@ var git  = require('gift');
 var fs = require('fs');
 var url = require('url');
 
+// https://github.com/aliaksandr-pasynkau/generator-node-lib
+var REPO_EXP = /^.+?github.com\/([^\/]+)\/([^\/]+).+?\/?(?:\?.*)?$/;
+
 module.exports = yeoman.generators.Base.extend({
+
 	initializing: function () {
 		this.pkg = require('../package.json');
+	},
 
-		var that = this;
+	git: function () {
 		var done = this.async();
-		var destPath = this.destinationPath();
+		var that = this;
+		var destination = this.destinationPath();
 
-		if (fs.existsSync(destPath + '/.git')) {
-			var repo = git(destPath);
-			repo.config(function (err, config) {
-				if (err) {
-					done();
-					return;
-				}
-				var items = ((config || {}).items || {});
-				var parsedUrl = url.parse(items['remote.origin.url'] || '');
-				delete parsedUrl.auth;
+		that.options.repository = undefined;
 
-				that.options.repo = url.format(parsedUrl);
-
-				done();
-			});
+		if (!fs.existsSync(destination + '/.git')) {
+			done();
 			return;
 		}
 
-		that.options.repo = undefined;
-		done();
+		git(destination).config(function (err, config) {
+			if (err) {
+				done();
+				return;
+			}
+
+			var items = ((config || {}).items || {});
+			var parsedUrl = url.parse(items['remote.origin.url'] || '');
+			delete parsedUrl.auth;
+
+			that.options.repository = url.format(parsedUrl);
+
+			done();
+		});
 	},
 
 	prompting: function () {
+		var that = this;
 		var done = this.async();
 
-		this.log(yosay(
-			'Welcome to the ' + chalk.red('Node Lib') + ' generator!'
-		));
+		this.log(yosay( 'Welcome to the ' + chalk.red('Node Lib') + ' generator!' ));
 
-		// https://github.com/aliaksandr-pasynkau/generator-node-lib
-		var REPO_EXP = /^.+?github.com\/([^\/]+)\/([^\/]+).*$/;
-
-		var prompts = [
+		this.prompt([
 			{
 				type: "input",
 				name: 'appname',
-				message: 'AppName',
+				message: 'Library Name',
 				default: path.basename(this.destinationPath()),
 				validate: function (value) {
 					return /^[_a-zA-Z][a-zA-Z0-9_-]*$/.test(value);
@@ -70,24 +73,47 @@ module.exports = yeoman.generators.Base.extend({
 			},
 			{
 				type: "input",
-				name: 'keywords',
-				message: 'Keywords',
-				default: ''
-			},
-			{
-				type: "input",
-				name: 'description',
-				message: 'Description',
-				default: ''
-			},
-			{
-				type: "input",
-				name: 'githubRepo',
-				message: 'Github Repository',
+				name: 'repository',
+				message: 'GitHub Repository',
 				validate: function (value) {
-					return REPO_EXP.test(value);
+					return !value.length || REPO_EXP.test(value);
 				},
-				default: this.options.repo
+				default: this.options.repository
+			},
+			{
+				type: 'confirm',
+				message: 'Add Travis-CI?',
+				name: 'travis',
+				default: true,
+				when: function (answ) {
+					return Boolean(answ.repository);
+				}
+			},
+			{
+				type: 'confirm',
+				message: 'Add Coverals.io?',
+				name: 'coveralls',
+				default: true,
+				when: function (answ) {
+					return Boolean(answ.repository && answ.travis);
+				}
+			},
+			{
+				type: 'confirm',
+				message: 'add shields?',
+				name: 'shields',
+				default: true,
+				when: function (answ) {
+					return Boolean(answ.repository);
+				}
+			},
+			{
+				type: 'list',
+				message: "Test Engine",
+				name: "testEngine",
+				choices: [
+					{ value: 'nodeunit', name: "NodeUnit", checked: true }
+				]
 			},
 			{
 				type: "input",
@@ -100,10 +126,9 @@ module.exports = yeoman.generators.Base.extend({
 				name: 'indentType',
 				message: 'CodeFormat: indent type',
 				choices: [
-					"tab",
-					"space"
-				],
-				default: 'tab'
+					{ name: "tab", checked: true },
+					{ name: "space" }
+				]
 			},
 			{
 				type: "input",
@@ -111,19 +136,62 @@ module.exports = yeoman.generators.Base.extend({
 				message: 'CodeFormat: indent size',
 				default: 4
 			}
-		];
-
-		this.prompt(prompts, function (props) {
-			_.extend(this.options, props);
-			this.options.githubRepo = (this.options.githubRepo || '').replace(/\.git$/, '');
-			this.options.appnameVar = _.camelCase(this.options.appname.replace(/^[^a-zA-Z_$]+/, 'lib'));
-			this.options.appnameCov = 'NODE_LIB_' + this.options.appnameVar.toUpperCase()+'_COVERAGE';
-
-			this.options.githubUser     = this.options.githubRepo.replace(REPO_EXP, '$1');
-			this.options.githubRepoName = this.options.githubRepo.replace(REPO_EXP, '$2');
-
+		], function (props) {
+			that.options.props = props;
 			done();
-		}.bind(this));
+		});
+	},
+
+	prepareProps: function () {
+		this.options.appname = {};
+		this.options.appname.value = this.options.props.appname;
+		this.options.appname.varName = _.camelCase(this.options.appname.value.replace(/^[^a-zA-Z_$]+/, 'lib'));
+		this.options.appname.cevEnvName = 'NODE_LIB_' + this.options.appname.varName.toUpperCase()+'_COVERAGE';
+
+		this.options.repository = null;
+
+		if (this.options.props.repository) {
+			var repo = this.options.props.repository;
+
+			this.options.repository = {};
+			this.options.repository.url = (repo || '').replace(/\.git$/, '');
+			this.options.user = repo.replace(REPO_EXP, '$1');
+			this.options.name = repo.replace(REPO_EXP, '$2');
+		}
+
+		console.log(this.options);
+	},
+
+	writing: {
+		app: function () {
+			// copy and template
+			this._copyTplDir('lib');
+			this._copyTplDir('test');
+
+			this._copyTpl('LICENSE');
+			this._copyTpl('package.json');
+			this._copyTpl('README.md');
+			this._copyDotTplFile('editorconfig');
+
+			// simple copy
+			this._copyDotFile('gitattributes');
+			this._copyDotFile('gitignore');
+			this._copyDotFile('jshintrc');
+			this._copyDotFile('travis.yml');
+			this._copyFile('Gruntfile.js');
+			this._copyFile('index.js');
+		}
+	},
+
+	install: function () {
+		this.installDependencies({
+			bower: false,
+			npm: true,
+			skipInstall: this.options['skip-install'],
+			callback: function () {
+				console.log('Everything is ready!');
+			}
+		});
 	},
 
 	_copyDir: function (dirname) {
@@ -173,33 +241,5 @@ module.exports = yeoman.generators.Base.extend({
 			this.destinationPath(file),
 			this.options
 		);
-	},
-
-	writing: {
-		app: function () {
-			this._copyTplDir('lib');
-			this._copyTplDir('test');
-			this._copyDotTplFile('editorconfig');
-			this._copyDotFile('gitattributes');
-			this._copyDotFile('gitignore');
-			this._copyFile('Gruntfile.js');
-			this._copyFile('index.js');
-			this._copyDotFile('jshintrc');
-			this._copyTpl('LICENSE');
-			this._copyTpl('package.json');
-			this._copyTpl('README.md');
-			this._copyDotFile('travis.yml');
-		}
-	},
-
-	install: function () {
-		this.installDependencies({
-			bower: false,
-			npm: true,
-			skipInstall: this.options['skip-install'],
-			callback: function () {
-				console.log('Everything is ready!');
-			}
-		});
 	}
 });

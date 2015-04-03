@@ -1,3 +1,3 @@
 "use strict";
 
-module.exports = process.env.<%= appnameCov %> ? require('./../../lib-cov') : require('./../../lib');
+module.exports = process.env.<%= appname.covName %> ? require('./../../lib-cov') : require('./../../lib');
