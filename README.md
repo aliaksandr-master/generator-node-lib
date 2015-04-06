@@ -19,11 +19,12 @@ Thank you for usage
 
 ## Getting Started
 You need answer on the questions:
+
 1. Library Name `(default: directory name)`
 2. Version `(default: 1.0.0)`
 3. Enter git repository `(default: will use from existing file ./.git/config or empty)`
-	4. Add Travis-CI? `(default: true)`
-		5. Add Coverals.io? `(default: true)`
+4. Add Travis-CI? `(default: true)`
+5. Add Coverals.io? `(default: true)`
 6. Test Engine `(default: nodeunit)`
 7. License `(default: MIT)`
 8. CodeFormat: indent type `(default: TAB)`
@@ -31,13 +32,16 @@ You need answer on the questions:
 
 ### Usage generator
 To install generator-node-lib from npm, run:
-```bash
-npm install -g generator-node-lib
+```shell
+$ npm install -g generator-node-lib
 ```
 
 Finally, initiate the generator:
-```bash
-yo node-lib
+```shell
+$ yo node-lib
+
+#or, if you want to install dependencies manually
+$ yo node-lib --slip-install 
 ```
 
 ### Usage generated library
@@ -79,14 +83,14 @@ Basically, he wears a top hat, lives in your computer, and waits for you to tell
 Not every new computer comes with a Yeoman pre-installed. He lives in the [npm](https://npmjs.org) package repository. You only have to ask for him once, then he packs up and moves into your hard drive. *Make sure you clean up, he likes new and shiny things.*
 
 ```bash
-npm install -g yo
+$ npm install -g yo
 ```
 
 ## License
 MIT
 
 ## Support
-If you have any problems, catch the bug or have any suggestion - [](https://github.com/aliaksandr-pasynkau/generator-node-lib/issues)
+If you have any problems, catch the bug or have any suggestion - please [find an existing issue or create new](https://github.com/aliaksandr-pasynkau/generator-node-lib/issues)
 
 ## Contributing
 Do that! [How to contribute open-source projects](https://guides.github.com/activities/contributing-to-open-source/)

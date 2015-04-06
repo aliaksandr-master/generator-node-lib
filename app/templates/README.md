@@ -26,7 +26,7 @@ Finally, use the library:
 
 <% if (repository) { %>
 ## Support
-If you have any problems, you cached a bug, or you have any suggestion - please [find a issue or create new](https://<%= repository.host %>/<%= repository.user %>/<%= repository.name %>/issues)
+If you have any problems, you cached a bug, or you have any suggestion - please [find an existing issue or create new](https://<%= repository.host %>/<%= repository.user %>/<%= repository.name %>/issues)
 <% } %>
 
 ## Contributing
