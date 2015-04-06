@@ -2,25 +2,73 @@
 [![npm](http://img.shields.io/npm/l/generator-node-lib.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 
 # generator-node-lib 
+Complete open-source nodeJs library development process
 
 > [Yeoman](http://yeoman.io) generator
 
-## Features
-- complete development process
-- jshint, editorconfig, gitignore
-- tests by [nodeunit](https://github.com/caolan/nodeunit)
-- code test coverage (by [coveralls.io](https://coveralls.io))
-- [travis](https://travis-ci.org) ci 
-- shields
+Thank you for usage
 
-watch project files and run check tasks (jshint, tests)
-```shell
-$ grunt
-```
+## Features
+- github.com and bitbacke.org git repositories support
+- base config files: jshint, editorconfig, gitignore
+- tests by different engines 
+	- [nodeunit](https://github.com/caolan/nodeunit)
+- continues integration (by [travis-ci](https://travis-ci.org))
+- code test coverage (by [coveralls.io](https://coveralls.io))
+- default shields in readme.md for your project (if you specified the repository), such as npm-version, npm-licence, devDependencies, dependencies, travis-ci build status, coverage percent
 
 ## Getting Started
+You need answer on the questions:
+1. Library Name `(default: directory name)`
+2. Version `(default: 1.0.0)`
+3. Enter git repository `(default: will use from existing file ./.git/config or empty)`
+	4. Add Travis-CI? `(default: true)`
+		5. Add Coverals.io? `(default: true)`
+6. Test Engine `(default: nodeunit)`
+7. License `(default: MIT)`
+8. CodeFormat: indent type `(default: TAB)`
+9. CodeFormat: indent size `(default: 4)`
 
-### What is Yeoman?
+### Usage generator
+To install generator-node-lib from npm, run:
+```bash
+npm install -g generator-node-lib
+```
+
+Finally, initiate the generator:
+```bash
+yo node-lib
+```
+
+### Usage generated library
+After answers on all questions you have base infrastructure for development, testing and deployment your library
+
+Install dependencies of your library
+```shell
+$ npm install
+```
+
+Watch project files and run check tasks (jshint, tests)
+```shell
+$ grunt default
+# or
+$ grunt check watch
+```
+
+For add new dependencies 
+```shell
+$ npm install needed-package --save 
+```
+
+For running your tests need
+```shell
+$ npm test
+#or
+$ grunt check
+```
+
+
+## What is Yeoman?
 
 Trick question. It's not a thing. It's this guy:
 
@@ -34,29 +82,10 @@ Not every new computer comes with a Yeoman pre-installed. He lives in the [npm](
 npm install -g yo
 ```
 
-### Yeoman Generators
-
-Yeoman travels light. He didn't pack any generators when he moved in. You can think of a generator like a plug-in. You get to choose what type of application you wish to create, such as a Backbone application or even a Chrome extension.
-
-To install generator-node-lib from npm, run:
-
-```bash
-npm install -g generator-node-lib
-```
-
-Finally, initiate the generator:
-
-```bash
-yo node-lib
-```
-
-### Getting To Know Yeoman
-
-Yeoman has a heart of gold. He's a person with feelings and opinions, but he's very easy to work with. If you think he's too opinionated, he can be easily convinced.
-
-If you'd like to get to know Yeoman better and meet some of his friends, [Grunt](http://gruntjs.com) and [Bower](http://bower.io), check out the complete [Getting Started Guide](https://github.com/yeoman/yeoman/wiki/Getting-Started).
-
-
 ## License
-
 MIT
+
+## Support / Contributing
+Do that!
+
+### Together we can change the world!
