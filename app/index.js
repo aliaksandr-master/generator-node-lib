@@ -10,7 +10,15 @@ var fs = require('fs');
 var url = require('url');
 
 // https://github.com/aliaksandr-pasynkau/generator-node-lib
-var REPO_EXP = /^.+?(?:github\.com|bitbucket\.org)\/([^\/]+)\/([^\/]+).+?\/?(?:\?.*)?$/;
+var REPO_EXP = /^.+?(github\.com|bitbucket\.org)\/([^\/]+)\/([^\/]+).+?\/?(?:\?.*)?$/;
+var parseRepo = function (url) {
+	return {
+		raw: url,
+		url:  (url || '').replace(/\.git$/, ''),
+		user: (url || '').replace(REPO_EXP, '$2'),
+		name: (url || '').replace(REPO_EXP, '$3'),
+	};
+};
 
 module.exports = yeoman.generators.Base.extend({
 
@@ -159,12 +167,7 @@ module.exports = yeoman.generators.Base.extend({
 
 		cfg.repository = null;
 		if (this.answers.repository) {
-			var repo = this.answers.repository;
-
-			cfg.repository = {};
-			cfg.repository.url = (repo || '').replace(/\.git$/, '');
-			cfg.repository.user = repo.replace(REPO_EXP, '$1');
-			cfg.repository.name = repo.replace(REPO_EXP, '$2');
+			cfg.repository = parseRepo(this.answers.repository);
 		}
 
 		this.config.set(cfg);
