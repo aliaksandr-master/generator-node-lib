@@ -8,10 +8,28 @@
 <% } %>
 
 # <%= app.name %>
+Powerfull nodeJs library
 
-## Install
-```shell
-$ npm i <%= app.name %> --save
+## Getting started 
+
+To install `<%= app.name %>` from npm, run:
+```bash
+npm install -g <%= app.name %> --save
 ```
 
-# Enjoy !
+Finally, use the library:
+```js
+<%= app.varName %> = require('<%= app.name %>');
+
+// do something helpful
+```
+
+### Enjoy!
+
+## Contributing
+If you want to develop this library do not be shy - Do that! [How to contribute open-source projects](https://guides.github.com/activities/contributing-to-open-source/)
+
+### Run tests <%= app.name %>
+```shell
+$ npm test
+```
