@@ -10,11 +10,12 @@ var fs = require('fs');
 var url = require('url');
 
 // https://github.com/aliaksandr-pasynkau/generator-node-lib
-var REPO_EXP = /^.+?(github\.com|bitbucket\.org)\/([^\/]+)\/([^\/]+).+?\/?(?:\?.*)?$/;
+var REPO_EXP = /^.*?(github\.com|bitbucket\.org)(?:\/|:)([^\/]+)\/([^\/]+).+?\/?(?:(:?\?|#).*)?$/;
 var parseRepo = function (url) {
 	return {
 		raw: url,
 		url:  (url || '').replace(/\.git$/, ''),
+		host: (url || '').replace(REPO_EXP, '$1'),
 		user: (url || '').replace(REPO_EXP, '$2'),
 		name: (url || '').replace(REPO_EXP, '$3'),
 	};
