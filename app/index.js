@@ -10,7 +10,7 @@ var fs = require('fs');
 var url = require('url');
 
 // https://github.com/aliaksandr-pasynkau/generator-node-lib
-var REPO_EXP = /^.+?github.com\/([^\/]+)\/([^\/]+).+?\/?(?:\?.*)?$/;
+var REPO_EXP = /^.+?(?:github\.com|bitbucket\.org)\/([^\/]+)\/([^\/]+).+?\/?(?:\?.*)?$/;
 
 module.exports = yeoman.generators.Base.extend({
 
