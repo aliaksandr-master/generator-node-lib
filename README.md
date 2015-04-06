@@ -85,7 +85,10 @@ npm install -g yo
 ## License
 MIT
 
-## Support / Contributing
-Do that!
+## Support
+If you have any problems, catch the bug or have any suggestion - [](https://github.com/aliaksandr-pasynkau/generator-node-lib/issues)
+
+## Contributing
+Do that! [How to contribute open-source projects](https://guides.github.com/activities/contributing-to-open-source/)
 
 ### Together we can change the world!
