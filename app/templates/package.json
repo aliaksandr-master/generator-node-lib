@@ -37,6 +37,6 @@
     "grunt-contrib-nodeunit": "^0.4.1",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-newer": "^1.1.0",
-    "grunto": "^1.2.1",
+    "grunto": "^1.2.1"
   }
 }
