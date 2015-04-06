@@ -184,7 +184,10 @@ module.exports = yeoman.generators.Base.extend({
 			this._copyTpl('package.json');
 			this._copyTpl('README.md');
 			this._copyDotTplFile('editorconfig');
-			this._copyDotTplFile('travis.yml');
+
+			if (this.config.get('travis')) {
+				this._copyDotTplFile('travis.yml');
+			}
 
 			// simple copy
 			this._copyDotFile('gitattributes');
