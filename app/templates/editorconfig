@@ -2,8 +2,8 @@
 root = true
 
 [*]
-indent_style = <%= props.indentType %>
-indent_size = <%=  props.indentSize %>
+indent_style = <%= indentType %>
+indent_size = <%= indentSize %>
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true

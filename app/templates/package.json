@@ -1,17 +1,19 @@
 {
-  "name": "<%= appname.value %>",
-  "version": "<%= props.version %>",
+  "name": "<%= app.name %>",
+  "version": "<%= version %>",
   "main": "lib/index.js",
   "scripts": {
-    "test": "node_modules/.bin/grunt jshint && node_modules/.bin/nodeunit test/",
-    "coveralls": "node_modules/.bin/jscoverage lib && <%= appname.covName %>=1 node_modules/.bin/nodeunit --reporter=lcov test/ | node_modules/.bin/coveralls"
+<% if (coveralls) { %>
+    "coveralls": "node_modules/.bin/jscoverage lib && <%= app.coverageEnvName %>=1 node_modules/.bin/nodeunit --reporter=lcov test/ | node_modules/.bin/coveralls",
+<% } %>
+    "test": "node_modules/.bin/grunt jshint && node_modules/.bin/nodeunit test/"
   },
   "description": "",
   "keywords": [],
-  <% if (props.license) { %>
-    "license": "<%= props.license %>",
-  <% } %>
-  <% if (repository) { %>
+<% if (license) { %>
+    "license": "<%= license %>",
+<% } %>
+<% if (repository) { %>
     "author": "<%= repository.user %>",
     "repository": {
       "type": "git",
@@ -21,9 +23,16 @@
       "url": "<%= repository.url %>/issues"
     },
     "homepage": "<%= repository.url %>",
-  <% } %>
+<% } %>
   "dependencies": {},
   "devDependencies": {
+<% if (coveralls) { %>
+    "jscoverage": "^0.5.9",
+    "coveralls": "^2.11.2",
+<% } %>
+<% if (testEngine === 'nodeunit') { %>
+   "nodeunit": "^0.9.0",
+<% } %>
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-jshint": "^0.11.0",
@@ -31,8 +40,5 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-newer": "^1.1.0",
     "grunto": "^1.2.1",
-    "jscoverage": "^0.5.9",
-    "coveralls": "^2.11.2",
-    "nodeunit": "^0.9.0"
   }
 }

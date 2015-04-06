@@ -1,5 +1,5 @@
 "use strict";
 
-var <%= appname.varName %>;
+var <%= app.varName %>;
 
-module.exports = <%= appname.varName %>;
+module.exports = <%= app.varName %>;

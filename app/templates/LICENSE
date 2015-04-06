@@ -1,4 +1,4 @@
-<% if (props.license.toUpperCase() === 'MIT') { %>
+<% if ((license || '').toUpperCase() === 'MIT') { %>
 The MIT License (MIT)
 
 <% if (repository) { %>

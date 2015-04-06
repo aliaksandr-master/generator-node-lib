@@ -16,31 +16,36 @@ module.exports = yeoman.generators.Base.extend({
 
 	initializing: function () {
 		this.pkg = require('../package.json');
+		this.answers = {};
+
+		this._git();
 	},
 
-	git: function () {
+	_git: function () {
 		var done = this.async();
 		var that = this;
-		var destination = this.destinationPath();
+		var destinationPath = this.destinationPath();
 
-		that.options.repository = undefined;
-
-		if (!fs.existsSync(destination + '/.git')) {
+		if (!fs.existsSync(path.resolve(destinationPath, '.git'))) {
 			done();
 			return;
 		}
 
-		git(destination).config(function (err, config) {
+		git(destinationPath).config(function (err, config) {
 			if (err) {
-				done();
-				return;
+				return done();
 			}
 
-			var items = ((config || {}).items || {});
+			var items = (config || {}).items || {};
 			var parsedUrl = url.parse(items['remote.origin.url'] || '');
-			delete parsedUrl.auth;
 
-			that.options.repository = url.format(parsedUrl);
+			delete parsedUrl.auth;
+			delete parsedUrl.query;
+			delete parsedUrl.search;
+			delete parsedUrl.hash;
+			delete parsedUrl.path;
+
+			that.repository = url.format(parsedUrl);
 
 			done();
 		});
@@ -52,7 +57,7 @@ module.exports = yeoman.generators.Base.extend({
 
 		this.log(yosay( 'Welcome to the ' + chalk.red('Node Lib') + ' generator!' ));
 
-		this.prompt([
+		var prompts = [
 			{
 				type: "input",
 				name: 'appname',
@@ -78,7 +83,7 @@ module.exports = yeoman.generators.Base.extend({
 				validate: function (value) {
 					return !value.length || REPO_EXP.test(value);
 				},
-				default: this.options.repository
+				default: this.repository
 			},
 			{
 				type: 'confirm',
@@ -96,15 +101,6 @@ module.exports = yeoman.generators.Base.extend({
 				default: true,
 				when: function (answ) {
 					return Boolean(answ.repository && answ.travis);
-				}
-			},
-			{
-				type: 'confirm',
-				message: 'add shields?',
-				name: 'shields',
-				default: true,
-				when: function (answ) {
-					return Boolean(answ.repository);
 				}
 			},
 			{
@@ -136,30 +132,42 @@ module.exports = yeoman.generators.Base.extend({
 				message: 'CodeFormat: indent size',
 				default: 4
 			}
-		], function (props) {
-			that.options.props = props;
+		];
+
+		this.prompt(prompts, function (answers) {
+			_.each(prompts, function (v) {
+				if (!answers.hasOwnProperty(v.name)) {
+					answers[v.name] = null;
+				}
+			});
+
+			that.answers = answers;
 			done();
 		});
 	},
 
 	prepareProps: function () {
-		this.options.appname = {};
-		this.options.appname.value = this.options.props.appname;
-		this.options.appname.varName = _.camelCase(this.options.appname.value.replace(/^[^a-zA-Z_$]+/, 'lib'));
-		this.options.appname.cevEnvName = 'NODE_LIB_' + this.options.appname.varName.toUpperCase()+'_COVERAGE';
+		var cfg = _.clone(this.answers);
 
-		this.options.repository = null;
+		delete cfg.repository;
+		delete cfg.appname;
 
-		if (this.options.props.repository) {
-			var repo = this.options.props.repository;
+		cfg.app = {};
+		cfg.app.name = this.answers.appname;
+		cfg.app.varName = _.camelCase(cfg.app.name.replace(/^[^a-zA-Z_$]+/, 'lib'));
+		cfg.app.coverageEnvName = 'NODE_LIB_' + cfg.app.varName.toUpperCase()+'_COVERAGE';
 
-			this.options.repository = {};
-			this.options.repository.url = (repo || '').replace(/\.git$/, '');
-			this.options.user = repo.replace(REPO_EXP, '$1');
-			this.options.name = repo.replace(REPO_EXP, '$2');
+		cfg.repository = null;
+		if (this.answers.repository) {
+			var repo = this.answers.repository;
+
+			cfg.repository = {};
+			cfg.repository.url = (repo || '').replace(/\.git$/, '');
+			cfg.repository.user = repo.replace(REPO_EXP, '$1');
+			cfg.repository.name = repo.replace(REPO_EXP, '$2');
 		}
 
-		console.log(this.options);
+		this.config.set(cfg);
 	},
 
 	writing: {
@@ -172,12 +180,12 @@ module.exports = yeoman.generators.Base.extend({
 			this._copyTpl('package.json');
 			this._copyTpl('README.md');
 			this._copyDotTplFile('editorconfig');
+			this._copyDotTplFile('travis.yml');
 
 			// simple copy
 			this._copyDotFile('gitattributes');
 			this._copyDotFile('gitignore');
 			this._copyDotFile('jshintrc');
-			this._copyDotFile('travis.yml');
 			this._copyFile('Gruntfile.js');
 			this._copyFile('index.js');
 		}
@@ -194,6 +202,10 @@ module.exports = yeoman.generators.Base.extend({
 		});
 	},
 
+	saveConfig: function () {
+		this.config.save();
+	},
+
 	_copyDir: function (dirname) {
 		this.expandFiles(dirname + '/**/*', { cwd: this.templatePath() }).forEach(function (file) {
 			this.fs.copy(
@@ -208,7 +220,7 @@ module.exports = yeoman.generators.Base.extend({
 			this.fs.copyTpl(
 				this.templatePath(file),
 				this.destinationPath(file),
-				this.options
+				this.config.getAll()
 			);
 		}, this);
 	},
@@ -231,7 +243,7 @@ module.exports = yeoman.generators.Base.extend({
 		this.fs.copyTpl(
 			this.templatePath(file),
 			this.destinationPath('.' + file),
-			this.options
+			this.config.getAll()
 		);
 	},
 
@@ -239,7 +251,7 @@ module.exports = yeoman.generators.Base.extend({
 		this.fs.copyTpl(
 			this.templatePath(file),
 			this.destinationPath(file),
-			this.options
+			this.config.getAll()
 		);
 	}
 });
