@@ -187,7 +187,6 @@ module.exports = yeoman.generators.Base.extend({
 			this._copyDotFile('gitignore');
 			this._copyDotFile('jshintrc');
 			this._copyFile('Gruntfile.js');
-			this._copyFile('index.js');
 		}
 	},
 
