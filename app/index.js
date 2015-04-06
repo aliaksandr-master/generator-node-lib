@@ -17,7 +17,7 @@ var parseRepo = function (url) {
 		url:  (url || '').replace(/\.git$/, ''),
 		host: (url || '').replace(REPO_EXP, '$1'),
 		user: (url || '').replace(REPO_EXP, '$2'),
-		name: (url || '').replace(REPO_EXP, '$3'),
+		name: (url || '').replace(REPO_EXP, '$3')
 	};
 };
 
@@ -207,6 +207,10 @@ module.exports = yeoman.generators.Base.extend({
 
 	saveConfig: function () {
 		this.config.save();
+	},
+
+	end: function () {
+		this.log(yosay( chalk.green('E N J O Y !') ));
 	},
 
 	_copyDir: function (dirname) {
