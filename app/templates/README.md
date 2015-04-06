@@ -26,6 +26,11 @@ Finally, use the library:
 
 ### Enjoy!
 
+<% if (repository) { %>
+## Support
+If you have any problems, you cached a bug, or you have any suggestion - please [find a issue or create new](https://<%= repository.host %>/<%= repository.user %>/<%= repository.name %>/issues)
+<% } %>
+
 ## Contributing
 If you want to develop this library do not be shy - Do that! [How to contribute open-source projects](https://guides.github.com/activities/contributing-to-open-source/)
 
