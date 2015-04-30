@@ -1,5 +1,7 @@
 [![npm](http://img.shields.io/npm/v/generator-node-lib.svg?style=flat-square)](https://www.npmjs.com/package/generator-node-lib)
 [![npm](http://img.shields.io/npm/l/generator-node-lib.svg?style=flat-square)](http://opensource.org/licenses/MIT)
+[![Dependency Status](https://david-dm.org/aliaksandr-pasynkau/generator-node-lib.svg?style=flat-square)](https://david-dm.org/aliaksandr-pasynkau/generator-node-lib)
+[![devDependency Status](https://david-dm.org/aliaksandr-pasynkau/generator-node-lib/dev-status.svg?style=flat-square)](https://david-dm.org/aliaksandr-pasynkau/generator-node-lib#info=devDependencies)
 
 # generator-node-lib 
 Complete open-source nodeJs library development process
