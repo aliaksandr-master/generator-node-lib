@@ -9,9 +9,15 @@
 ~*
 *~
 
-
-# special ignore
+# npm
 npm-debug.log
 node_modules/
+
+# bower
 bower_components/
+
+# tmp files
+.tmp
+
+# coverage
 lib-cov/
