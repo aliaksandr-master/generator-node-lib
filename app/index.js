@@ -9,9 +9,12 @@ var git  = require('gift');
 var fs = require('fs');
 var url = require('url');
 
-// https://github.com/aliaksandr-pasynkau/generator-node-lib
+// match example https://github.com/aliaksandr-pasynkau/generator-node-lib
+// match example git@github.com:aliaksandr-pasynkau/generator-node-lib
 var REPO_EXP = /^.*?(github\.com|bitbucket\.org)(?:\/|:)([^\/]+)\/([^\/]+).+?\/?(?:(:?\?|#).*)?$/;
 var parseRepo = function (url) {
+	url = url.replace(/git@(github\.com|bitbucket\.org):/, 'https://$1/');
+
 	return {
 		raw: url,
 		url:  (url || '').replace(/\.git$/, ''),
@@ -192,7 +195,7 @@ module.exports = yeoman.generators.Base.extend({
 			// simple copy
 			this._copyDotFile('gitattributes');
 			this._copyDotFile('gitignore');
-			this._copyDotFile('jshintrc');
+			this._copyDotFile('eslintrc');
 			this._copyFile('Gruntfile.js');
 		}
 	},
