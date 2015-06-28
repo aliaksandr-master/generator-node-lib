@@ -1,33 +1,45 @@
-"use strict";
+'use strict';
 
-module.exports = require('grunto')(function(grunt) {
-	grunt.registerTask('check',   [ 'newer:jshint:all', 'nodeunit' ]);
-	grunt.registerTask('default', [ 'check', 'watch' ]);
+var grunto = require('grunto');
+
+module.exports = grunto(function(grunt) {
+	grunt.registerTask('test',   [
+		'newer:eslint'
+		/*<% if (testEngine === 'nodeunit') { %>*/
+		,'nodeunit'
+		/*<% } %>*/
+	]);
+
+	grunt.registerTask('default', [
+		'test',
+		'watch'
+	]);
 
 	return {
+		/*<% if (testEngine === 'nodeunit') { %>*/
 		nodeunit: {
 			all: [
 				'test/*.js'
 			]
 		},
-		jshint: {
-			options: {
-				jshintrc: true
-			},
+		/*<% } %>*/
+
+		eslint: {
 			all: [
-				'**/*.{js,json}',
-				'!node_modules/**/*.{js,json}',
-				'!lib-cov/**/*.{js,json}'
+				'**/*.js',
+				'!node_modules/**/*',
+				'!lib-cov/**/*'
 			]
 		},
+
 		watch: {
 			files: [
-				'**/*',
+				'lib/**/*',
 				'!node_modules/**/*',
 				'!lib-cov/**/*'
 			],
 			tasks: [
-				'check'
+				'test'
 			]
 		}
 	};

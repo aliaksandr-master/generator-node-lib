@@ -1,17 +1,17 @@
 # ide and os files
-/.idea/
-**/*.DS_Store
-**/*.kate-swp
-**/*.desktop
-**/*.thumb
-**/*.sublime*
-**/.~*
-**/~*
-**/*~
+.idea/
+*.DS_Store
+*.kate-swp
+*.desktop
+*.thumb
+*.sublime*
+.~*
+~*
+*~
 
 
 # special ignore
-/npm-debug.log
-/node_modules/
-/bower_components/
-/lib-cov/
+npm-debug.log
+node_modules/
+bower_components/
+lib-cov/
