@@ -1,10 +1,9 @@
-"use strict";
+'use strict';
 
-var _ = require('lodash');
-var <%= app.varName %> = require('./_lib');
-
-exports['test'] = function (test) {
-	test.ok(true);
+exports['test loading'] = function (test) {
+	test.doesNotThrow(function () {
+		require('./_lib');
+	});
 
 	test.done();
 };

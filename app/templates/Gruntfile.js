@@ -2,12 +2,10 @@
 
 var grunto = require('grunto');
 
-module.exports = grunto(function(grunt) {
+module.exports = grunto(function (grunt) {
 	grunt.registerTask('test',   [
-		'newer:eslint'
-		/*<% if (testEngine === 'nodeunit') { %>*/
-		,'nodeunit'
-		/*<% } %>*/
+		'newer:eslint'/*<% if (testEngine === 'nodeunit') { %>*/,
+		'nodeunit'/*<% } %>*/
 	]);
 
 	grunt.registerTask('default', [
