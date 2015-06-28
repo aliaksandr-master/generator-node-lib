@@ -12,7 +12,7 @@ Thank you for usage
 
 ## Features
 - github.com and bitbacke.org git repositories support
-- base config files: jshint, editorconfig, gitignore
+- base config files: eslint, editorconfig, gitignore
 - tests by different engines 
 	- [nodeunit](https://github.com/caolan/nodeunit)
 - continues integration (by [travis-ci](https://travis-ci.org))
@@ -54,7 +54,7 @@ Install dependencies of your library
 $ npm install
 ```
 
-Watch project files and run check tasks (jshint, tests)
+Watch project files and run check tasks (eslint, tests)
 ```shell
 $ grunt default
 # or
