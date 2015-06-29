@@ -11,16 +11,17 @@ var url = require('url');
 
 // match example https://github.com/aliaksandr-pasynkau/generator-node-lib
 // match example git@github.com:aliaksandr-pasynkau/generator-node-lib
-var REPO_EXP = /^.*?(github\.com|bitbucket\.org)(?:\/|:)([^\/]+)\/([^\/]+).+?\/?(?:(:?\?|#).*)?$/;
+var REPO_EXP = /^.*?(github\.com|bitbucket\.org)(?:\/|:)([^\/]+)\/([^\/]+)(?:\/?.*)$/;
 var parseRepo = function (url) {
-	url = url.replace(/git@(github\.com|bitbucket\.org):/, 'https://$1/');
+	url = url || '';
+	url = url.replace(/^git@(github\.com|bitbucket\.org):/, 'https://$1/');
 
 	return {
 		raw: url,
-		url:  (url || '').replace(/\.git$/, ''),
-		host: (url || '').replace(REPO_EXP, '$1'),
-		user: (url || '').replace(REPO_EXP, '$2'),
-		name: (url || '').replace(REPO_EXP, '$3')
+		url: url.replace(REPO_EXP, 'https://$1/$2/$3').replace(/\.git$/, ''),
+		host: url.replace(REPO_EXP, '$1'),
+		user: url.replace(REPO_EXP, '$2'),
+		name: url.replace(REPO_EXP, '$3').replace(/\.git$/, '')
 	};
 };
 
@@ -172,6 +173,7 @@ module.exports = yeoman.generators.Base.extend({
 		cfg.repository = null;
 		if (this.answers.repository) {
 			cfg.repository = parseRepo(this.answers.repository);
+			this.log(cfg.repository);
 		}
 
 		this.config.set(cfg);
