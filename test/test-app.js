@@ -6,22 +6,32 @@ var helpers = require('yeoman-generator').test;
 var os = require('os');
 
 describe('node-lib:app', function () {
-  before(function (done) {
-    helpers.run(path.join(__dirname, '../app'))
-      .inDir(path.join(os.tmpdir(), './temp-test'))
-      .withOptions({ 'skip-install': true })
-      .withPrompt({
-        someOption: true
-      })
-      .on('end', done);
-  });
+	before(function (done) {
+		helpers
+			.run(path.resolve(__dirname, '../app'))
+			.inDir(path.join(os.tmpdir(), './temp-test'))
+			.withOptions({
+				'skip-install': true
+			})
+			.withPrompts({
+				appname: 'hello',
+				version: '0.0.1',
+				repository: '',
+				travis: true,
+				coveralls: true,
+				testEngine: 'nodeunit',
+				license: 'MIT',
+				indentType: 'tab',
+				indentSize: 4
+			})
+			.on('end', done);
+	});
 
-  it('creates files', function () {
-    assert.file([
-      'bower.json',
-      'package.json',
-      '.editorconfig',
-      '.jshintrc'
-    ]);
-  });
+	it('creates files', function () {
+		assert.file([
+			'package.json',
+			'.editorconfig',
+			'.eslintrc'
+		]);
+	});
 });
